@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
+                          https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Authentication\Model\User" table="user">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+            <sequence-generator sequence-name="tablename_seq" allocation-size="100" initial-value="1" />
+        </id>
+        <field name="username" type="string" length="255" unique="true" />
+        <field name="uuid" type="string" length="255" unique="true" />
+        <field name="roles" type="json" />
+        <field name="password" type="string" length="255" />
+        <field name="status" type="json" />
+        <field name="locale" type="string" length="255" />
+        <embedded name="token" />
+        <field name="lastLogin" type="datetime" />
+
+        <!-- SoftDeletableTrait -->
+        <field name="dateDeleted" type="datetime" nullable="true" />
+        <field name="deletedBy" type="string" length="255" nullable="true" />
+        <!-- /SoftDeletableTrait -->
+
+        <!-- TimestampableTrait -->
+        <field name="dateCreated" type="datetime" />
+        <field name="dateModified" type="datetime" />
+        <!-- /SoftDeletableTrait -->
+    </entity>
+
+    <embeddable class="App\Domain\Authentication\Model\Embedded\Token">
+        <field name="value" type="string" nullable="true"/>
+        <field name="expiredAt" type="datetime" nullable="true"/>
+    </embeddable>
+</doctrine-mapping>

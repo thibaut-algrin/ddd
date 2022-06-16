@@ -1,0 +1,51 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Authentification:
+                is_bundle: false
+                type: attribute
+#                type: xml
+                dir: '%kernel.project_dir%/src/Domain/Authentication/Model'
+#                dir: '%kernel.project_dir%/src/Infrastructure/Authentication/Doctrine/Mapping'
+                prefix: 'App\Domain\Authentication\Model'
+
+#            App:
+#                is_bundle: false
+#                dir: '%kernel.project_dir%/src/Entity'
+#                prefix: 'App\Entity'
+#                alias: App
+
+when@dev:
+    doctrine:
+        dbal:
+            dbname_suffix: '_test'
+
+when@test:
+    doctrine:
+        dbal:
+            dbname_suffix: '_test'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
